@@ -96,9 +96,14 @@ public:
     void * getWindowContext(){return getGLFWWindow();}
 
 	ofVec3f		getWindowSize();
-	ofVec3f		getScreenSize();
 	ofVec3f 	getWindowPosition();
+	
+	ofVec3f		getScreenSize();
+	ofVec3f		getScreenSize(int i);
+	ofVec3f		getScreenSize(const char*);
 
+	vector<const char*>		getScreens();
+	
 	void setWindowTitle(string title);
 	void setWindowPosition(int x, int y);
 	void setWindowShape(int w, int h);
@@ -109,6 +114,9 @@ public:
 	ofWindowMode	getWindowMode();
 
 	void		setFullscreen(bool fullscreen);
+	void		setFullscreen(int index);
+	void		setFullscreen(const char* name);
+	
 	void		toggleFullscreen();
 
 	void		enableSetupScreen();
@@ -199,6 +207,7 @@ private:
 	GLFWwindow* 	windowP;
     
 	int				getCurrentMonitor();
+	int				lastMonitor;
 
 	ofBaseApp *	ofAppPtr;
 

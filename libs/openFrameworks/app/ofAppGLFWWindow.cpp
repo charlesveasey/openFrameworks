@@ -48,6 +48,7 @@ ofAppGLFWWindow::ofAppGLFWWindow(){
 	windowP = nullptr;
 	windowW = 0;
 	windowH = 0;
+	lastMonitor = 0;
 
 	glfwSetErrorCallback(error_cb);
 }
@@ -472,13 +473,17 @@ int ofAppGLFWWindow::getCurrentMonitor(){
 	return 0;
 }
 
-
 //------------------------------------------------------------
 ofPoint ofAppGLFWWindow::getScreenSize(){
+	return getScreenSize(getCurrentMonitor());
+}
+	
+//------------------------------------------------------------
+ofPoint ofAppGLFWWindow::getScreenSize(int i){
 	int count;
 	GLFWmonitor** monitors = glfwGetMonitors(&count);
 	if(count>0){
-		int currentMonitor = getCurrentMonitor();
+		int currentMonitor = i;
 		const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[currentMonitor]);
 		if(desktopMode){
 			if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
@@ -493,7 +498,32 @@ ofPoint ofAppGLFWWindow::getScreenSize(){
 		return ofPoint(0,0);
 	}
 }
+	
+//------------------------------------------------------------
+ofPoint ofAppGLFWWindow::getScreenSize(const char* name){
+	int count;
+	lastMonitor = getCurrentMonitor();
+	const auto monitors = glfwGetMonitors(&count);
+	for(int i = 0; i<count; i++){
+		auto m = monitors[i];
+		if (strcmp(glfwGetMonitorName(m),name) == 0){
+			return getScreenSize(i);
+		}
+	}
+	return ofPoint(0,0);
+}
 
+//------------------------------------------------------------
+vector<const char*> ofAppGLFWWindow::getScreens(){
+	int count;
+	GLFWmonitor** monitor = glfwGetMonitors(&count);
+	vector<const char*> m;
+	for(int i = 0; i<count; i++){
+		m.push_back(glfwGetMonitorName(monitor[i]));
+	}
+	return m;
+}
+	
 //------------------------------------------------------------
 int ofAppGLFWWindow::getWidth(){
 	if(windowMode == OF_GAME_MODE)
@@ -570,6 +600,7 @@ void ofAppGLFWWindow::disableSetupScreen(){
 void ofAppGLFWWindow::setFullscreen(bool fullscreen){
  
 	ofWindowMode curWindowMode = windowMode;
+	int currentMonitor = getCurrentMonitor();
  
   if (fullscreen){
 		windowMode = OF_FULLSCREEN;
@@ -579,7 +610,7 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
  
     //we only want to change window mode if the requested window is different to the current one.
     bool bChanged = windowMode != curWindowMode;
-    if( !bChanged ){
+    if( !bChanged && (currentMonitor == lastMonitor) ){
         return;
     }
  
@@ -689,9 +720,8 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
 		int monitorCount;
         GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
  
-		int currentMonitor = getCurrentMonitor();
 		ofVec3f screenSize = getScreenSize();
- 
+
 		ofRectangle allScreensSpace;
  
         if( settings.multiMonitorFullScreen && monitorCount > 1 ){
@@ -809,7 +839,6 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
  
             int monitorCount;
             GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
-            int currentMonitor = getCurrentMonitor();
             glfwGetMonitorPos(monitors[currentMonitor], &xpos, &ypos);
  
         }
@@ -838,6 +867,36 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
 		setWindowShape(nonFullScreenW+4, nonFullScreenH+4);
 	}
 #endif
+}
+
+//------------------------------------------------------------
+void ofAppGLFWWindow::setFullscreen(int index){
+	int count;
+	lastMonitor = getCurrentMonitor();
+	GLFWmonitor** monitors = glfwGetMonitors(&count);
+	if (index < 0)
+		index = 0;
+	else if (index >= count)
+		index = count - 1;
+	int x,y;
+	auto m = monitors[index];
+	glfwGetMonitorPos(m,&x,&y);
+	setWindowPosition(x, y);
+	setFullscreen(true);
+}
+
+//------------------------------------------------------------
+void ofAppGLFWWindow::setFullscreen(const char* name){
+	int count;
+	lastMonitor = getCurrentMonitor();
+	const auto monitors = glfwGetMonitors(&count);
+	for(int i = 0; i<count; i++){
+		auto m = monitors[i];
+		if (strcmp(glfwGetMonitorName(m),name) == 0){
+			setFullscreen(i);
+			return;
+		}
+	}
 }
 
 //------------------------------------------------------------
