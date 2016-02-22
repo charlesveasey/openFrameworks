@@ -131,8 +131,12 @@ public:
 
 	/// \}
 
+	void mousePressed(ofMouseEventArgs & mouse);
+	void mouseReleased(ofMouseEventArgs & mouse);
+	void mouseDragged(ofMouseEventArgs & mouse);
+	void mouseScrolled(ofMouseEventArgs & mouse);
+	void update(ofEventArgs & args);
 
-	
 private:
 	void setDistance(float distance, bool save);
 
@@ -169,15 +173,12 @@ private:
 
 	ofVec2f lastMouse, prevMouse;
 	ofVec2f mouseVel;
+	ofMouseEventArgs mouseArgs;
 	
+	void updateMouse(const ofMouseEventArgs & mouse);
 	void updateRotation();
 	void updateTranslation();
-	void update(ofEventArgs & args);
-	void mousePressed(ofMouseEventArgs & mouse);
-	void mouseReleased(ofMouseEventArgs & mouse);
-	void mouseDragged(ofMouseEventArgs & mouse);
-	void mouseScrolled(ofMouseEventArgs & mouse);
-	void updateMouse(const ofMouseEventArgs & mouse);
+
 
     /// \brief The key used to differentiate between translation and rotation.
 	char doTranslationKey;

@@ -50,9 +50,16 @@ void ofEasyCam::update(ofEventArgs & args){
 	if(!bDistanceSet && bAutoDistance){
 		setDistance(getImagePlaneDistance(viewport), true);
 	}
+
+	//
+	bMouseInputEnabled = true;
+	
 	if(bMouseInputEnabled){
 
-		if(events->getMousePressed()) prevMouse = ofVec2f(events->getMouseX(),events->getMouseY());
+		//if(events->getMousePressed()) 
+			//prevMouse = ofVec2f(events->getMouseX(),events->getMouseY());
+
+		prevMouse = ofVec2f(mouseArgs.x, mouseArgs.y);
 
 		if (bDoRotate) {
 			updateRotation();
@@ -287,6 +294,8 @@ void ofEasyCam::updateRotation(){
 }
 
 void ofEasyCam::mousePressed(ofMouseEventArgs & mouse){
+	mouseArgs = mouse;
+
 	ofRectangle viewport = getViewport(this->viewport);
 	if(viewport.inside(mouse.x, mouse.y)){
 		lastMouse = mouse;
@@ -314,6 +323,8 @@ void ofEasyCam::mousePressed(ofMouseEventArgs & mouse){
 }
 
 void ofEasyCam::mouseReleased(ofMouseEventArgs & mouse){
+	mouseArgs = mouse;
+
 	unsigned long curTap = ofGetElapsedTimeMillis();
 	ofRectangle viewport = getViewport(this->viewport);
 	if(lastTap != 0 && curTap - lastTap < doubleclickTime){
@@ -336,12 +347,13 @@ void ofEasyCam::mouseReleased(ofMouseEventArgs & mouse){
 }
 
 void ofEasyCam::mouseDragged(ofMouseEventArgs & mouse){
+	mouseArgs = mouse;
 	mouseVel = mouse  - lastMouse;
-
 	updateMouse(mouse);
 }
 
 void ofEasyCam::mouseScrolled(ofMouseEventArgs & mouse){
+	mouseArgs = mouse;
 	ofRectangle viewport = getViewport(this->viewport);
 	prevPosition = ofCamera::getGlobalPosition();
 	prevAxisZ = getZAxis();
