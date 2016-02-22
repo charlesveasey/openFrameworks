@@ -124,6 +124,12 @@ public:
     /// \brief Disable the mouse's middle button for camera control.
 	void disableMouseMiddleButton();
 
+	/// \brief Enable the mouse's double click to reset camera.
+	void enableMouseDoubleClick();
+
+	/// \brief Disable the mouse's double click to reset camera.
+	void disableMouseDoubleClick();
+
     /// \brief Determine if the middle mouse button is enabled.
     /// \todo Rename to isMouseMiddleButtonEnabled().
     /// \returns true iff the mouse's middle button is enabled.
@@ -143,6 +149,7 @@ private:
 	ofNode target;
 
 	bool bEnableMouseMiddleButton;
+	bool bEnableMouseDoubleClick;
 	bool bApplyInertia;
 	bool bDoTranslate;
 	bool bDoRotate;

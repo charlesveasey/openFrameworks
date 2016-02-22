@@ -31,6 +31,7 @@ ofEasyCam::ofEasyCam(){
 	bDoScrollZoom = false;
 	bInsideArcball = true;
 	bEnableMouseMiddleButton = true;
+	bEnableMouseDoubleClick = true;
 	bAutoDistance = true;
 	doTranslationKey = 'm';
 	bEventsSet = false;
@@ -249,6 +250,16 @@ void ofEasyCam::enableMouseMiddleButton(){
 //----------------------------------------
 void ofEasyCam::disableMouseMiddleButton(){
 	bEnableMouseMiddleButton = false;
+}
+
+//----------------------------------------
+void ofEasyCam::enableMouseDoubleClick() {
+	bEnableMouseDoubleClick = true;
+}
+
+//----------------------------------------
+void ofEasyCam::disableMouseDoubleClick() {
+	bEnableMouseDoubleClick = false;
 }
 
 //----------------------------------------
