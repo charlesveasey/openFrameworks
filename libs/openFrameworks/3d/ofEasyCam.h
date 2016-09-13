@@ -166,13 +166,6 @@ public:
 	/// Returns the area bounds used for mouse control.
 	ofRectangle getControlArea() const;
 	
-	void update(ofEventArgs & args);
-	void mousePressed(ofMouseEventArgs & mouse);
-	void mouseReleased(ofMouseEventArgs & mouse);
-	void mouseDragged(ofMouseEventArgs & mouse);
-	void mouseScrolled(ofMouseEventArgs & mouse);
-	void updateMouse(const ofMouseEventArgs & mouse);
-
 private:
 	void setDistance(float distance, bool save);
 
@@ -213,7 +206,12 @@ private:
 	
 	void updateRotation();
 	void updateTranslation();
-
+	void update(ofEventArgs & args);
+	void mousePressed(ofMouseEventArgs & mouse);
+	void mouseReleased(ofMouseEventArgs & mouse);
+	void mouseDragged(ofMouseEventArgs & mouse);
+	void mouseScrolled(ofMouseEventArgs & mouse);
+	void updateMouse(const ofMouseEventArgs & mouse);
 	glm::vec3 up() const;
 
     /// \brief The key used to differentiate between translation and rotation.
