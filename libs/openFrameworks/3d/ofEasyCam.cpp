@@ -16,7 +16,7 @@ ofEasyCam::ofEasyCam(){
 
 //----------------------------------------
 ofEasyCam::~ofEasyCam(){
-	disableMouseInput();
+	//disableMouseInput();
 }
 
 //----------------------------------------
